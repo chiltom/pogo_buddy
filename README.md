@@ -1,4 +1,5 @@
 # Pokemon GO Buddy
+
 > Helping you keep track of your Pokemon GO adventures
 
 ## Architecture
@@ -9,4 +10,4 @@
 
 **Database**: PostgreSQL
 
-**Containerization**: Docker
+**Containerization**: Docker Compose
