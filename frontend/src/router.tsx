@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
+import HomePage from "./pages/HomePage";
 
 const router = createBrowserRouter([
   {
@@ -8,7 +9,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <div>Hello World</div>,
+        element: <HomePage />,
       },
     ],
     errorElement: <div>404 Not Found</div>,

@@ -20,6 +20,7 @@ dist-ssr
 *.out
 *.tmp
 vendor/
+tmp/
 
 # Editor directories and files
 .vscode/*
