@@ -36,6 +36,7 @@ tmp/
 # Env Files
 .env
 *.env
+.env.*
 docker-compose.override.yml
 docker/*.env
 docker/*.log
