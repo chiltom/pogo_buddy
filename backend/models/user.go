@@ -2,6 +2,7 @@ package models
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -113,4 +114,24 @@ func DeleteUser(pool *pgxpool.Pool, userID int) error {
 	query := `DELETE FROM users WHERE id = $1`
 	_, err := pool.Exec(context.Background(), query, userID)
 	return err
+}
+
+// AuthenticateUser checks if the provided credentials are valid
+func AuthenticateUser(pool *pgxpool.Pool, username, password string) (*User, error) {
+	query := `SELECT id, username, first_name, last_name, email, password, created_at, active
+			  FROM users
+			  WHERE username = $1`
+
+	var user User
+	err := pool.QueryRow(context.Background(), query, username).Scan(&user.ID, &user.Username, &user.FirstName, &user.LastName, &user.Email, &user.Password, &user.CreatedAt, &user.Active)
+	if err != nil {
+		return nil, errors.New("user not found")
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
+		return nil, errors.New("invalid password")
+	}
+
+	user.Username = username
+	return &user, nil
 }

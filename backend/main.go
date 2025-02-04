@@ -4,14 +4,24 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/chiltom/pogo_buddy/db"
+	"github.com/chiltom/pogo_buddy/routes"
+	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load .env variables
+	env := "development"
+	if err := godotenv.Load(".env." + env); err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	serverPort := os.Getenv("SERVER_PORT")
+
 	// Initialize db connection
 	dbConn := db.ConnectDB()
 	defer db.CloseDB()
@@ -25,10 +35,12 @@ func main() {
 
 	// db.RunMigrations()
 
-	// Graceful shutdown handling
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
+	// Create a router
+	router := mux.NewRouter()
 
-	<-stop
-	fmt.Println("Shutting down application...")
+	// Register routes
+	routes.AuthRoutes(router)
+
+	log.Println("Server is running on port" + serverPort)
+	http.ListenAndServe(serverPort, router)
 }

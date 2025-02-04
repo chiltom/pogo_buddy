@@ -4,7 +4,6 @@
 
 ## Backend
 
-- Learn more Gin and PGX to set up handlers and SQL seeders
 - Create schema design with pgx files and seed database with migrations
 - Create handlers for http requests to the backend
 - Setup pulling data from 3rd party APIs with requests and sending it to front end
