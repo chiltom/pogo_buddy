@@ -20,10 +20,11 @@
 ## Docker
 
 - Write production environment Dockerfiles and compose file to ensure smooth transition to production site
-    - Build in .env.production file to ensure that secrets are well maintained
+  - Build in .env.production file to ensure that secrets are well maintained
 - Ensure hot reloading is working for development
 
 ## Misc
 
 - Create CI/CD pipeline with GitHub Actions to lint and test code on push
 - Finish ERD and other Design Documents
+- Start project management workflow to track tasks in a more efficient manner
