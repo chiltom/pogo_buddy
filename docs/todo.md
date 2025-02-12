@@ -22,6 +22,7 @@
 - Write production environment Dockerfiles and compose file to ensure smooth transition to production site
   - Build in .env.production file to ensure that secrets are well maintained
 - Ensure hot reloading is working for development
+- Possibly migrate to local VMs instead of AWS to provide cheaper/easier storage
 
 ## Misc
 
