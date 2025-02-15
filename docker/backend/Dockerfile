@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8080
 
 # Start the application with CompileDaemon for hot reloading
-CMD ["CompileDaemon", "--build=go build -o ./tmp/main ./cmd", "--command=./tmp/main"]
+CMD ["CompileDaemon", "--build=go build -o ./tmp/main .", "--command=./tmp/main"]
