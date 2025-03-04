@@ -89,3 +89,52 @@ func GetUserByEmail(db *sql.DB, email string) (*models.User, error) {
 }
 
 // UpdateUser updates a user in the database
+func UpdateUser(db *sql.DB, user models.User) error {
+	query := `
+		UPDATE users
+		SET email = $1,
+			password = $2,
+			first_name = $3,
+			last_name = $4,
+			email_verified = $5,
+			verification_token = $6,
+			verification_expiry = $7,
+			updated_at = NOW()
+		WHERE id = $8
+	`
+
+	_, err := db.Exec(
+		query,
+		user.Email,
+		user.Password,
+		user.FirstName,
+		user.LastName,
+		user.EmailVerified,
+		user.VerificationToken,
+		user.VerificationExpiry,
+		user.ID,
+	)
+
+	if err != nil {
+		log.Printf("Error updating user: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+// DeleteUser deletes a user from the database
+func DeleteUser(db *sql.DB, id int) error {
+	query := `
+		DELETE FROM users
+		WHERE id = $1
+	`
+
+	_, err := db.Exec(query, id)
+	if err != nil {
+		log.Printf("Error deleting user: %v", err)
+		return err
+	}
+
+	return nil
+}
