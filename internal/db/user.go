@@ -87,3 +87,5 @@ func GetUserByEmail(db *sql.DB, email string) (*models.User, error) {
 
 	return &user, nil
 }
+
+// UpdateUser updates a user in the database
