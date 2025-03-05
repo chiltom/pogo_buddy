@@ -1,61 +1,54 @@
 package db
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
-	"os"
-	"sync"
+  "database/sql"
+  "fmt"
+  "log"
 
-	"github.com/chiltom/pogo_buddy/internal/utils"
-	_ "github.com/lib/pq"
+  _ "github.com/lib/pq"
 )
 
-var (
-	db   *sql.DB
-	once sync.Once
-)
-
-// getDBConnString constructs the Postgres connection string from env variables
-func getDBConnString() string {
-	utils.LoadEnv("../../.env")
-
-	return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-	)
+type DbConfig struct {
+  Host     string
+  Port     string
+  User     string
+  Password string
+  DBName   string
+  SSLMode  string
 }
 
-// Connect to the Postgres database
-func Connect() (*sql.DB, error) {
-	var err error
-	once.Do(func() {
-		connStr := getDBConnString()
-		db, err = sql.Open("postgres", connStr)
-		if err != nil {
-			log.Fatalf("Failed to open DB connection: %v", err)
-		}
-
-		if err = db.Ping(); err != nil {
-			log.Fatalf("Failed to ping DB: %v", err)
-		}
-
-		log.Println("Connected to DB")
-	})
-
-	return db, err
+type DB struct {
+  *sql.DB
 }
 
-// Close the database connection
-func Close() {
-	if db != nil {
-		if err := db.Close(); err != nil {
-			log.Fatalf("Failed to close DB: %v", err)
-		} else {
-			log.Println("Closed DB connection")
-		}
-	}
+func New(cfg DbConfig) (*DB, error) {
+  connStr := fmt.Sprintf(
+    "host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+    cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.DBName, cfg.SSLMode,
+  )
+
+  db, err := sql.Open("postgres", connStr)
+  if err != nil {
+    return nil, fmt.Errorf("failed to open db connection: %w", err)
+  }
+
+  if err := db.Ping(); err != nil {
+    db.Close()
+    return nil, fmt.Errorf("failed to ping db: %w", err)
+  }
+
+  log.Println("connected to db")
+  return &DB{db}, nil
+}
+
+func (d *DB) Close() error {
+  if d.DB != nil {
+    err := d.DB.Close()
+    if err != nil {
+      log.Printf("failed to close db: %v", err)
+      return fmt.Errorf("failed to close db: %w", err)
+    }
+    log.Println("close db connection")
+  }
+  return nil
 }
