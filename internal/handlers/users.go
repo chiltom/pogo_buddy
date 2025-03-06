@@ -42,7 +42,7 @@ func (h *UserHandlers) CreateUser(w http.ResponseWriter, r *http.Request) {
   data := struct{
     UserID int
   }{id}
-  if err := h.tmpl.ExecuteTemplate(w, "base.html", data); err != nil {
+  if err := h.tmpl.ExecuteTemplate(w, "uc_success.html", data); err != nil {
     log.Printf("failed to render template: %v", err)
     http.Error(w, "Internal server error", http.StatusInternalServerError)
   }

@@ -14,7 +14,7 @@ type Handlers struct {
 }
 
 func New(dbConn *db.DB) *Handlers {
-  tmpl := template.Must(template.ParseGlob("../../static/html/*.html"))
+  tmpl := template.Must(template.ParseGlob("static/html/*.html"))
   
   userStore := db.NewUserStore(dbConn.DB)
   userSvc := services.NewUserService(userStore)

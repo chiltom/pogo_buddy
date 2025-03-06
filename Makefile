@@ -10,7 +10,7 @@ build:
 
 run:
 	@echo "Running the application..."
-	air -c .air.toml
+	./tmp/main
 
 test:
 	@echo "Running tests..."
