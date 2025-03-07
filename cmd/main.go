@@ -1,26 +1,19 @@
 package main
 
 import (
-  "log"
-  "net/http"
-  "os"
+	"log"
+	"net/http"
 
-  "github.com/chiltom/pogo_buddy/internal/db"
-  "github.com/chiltom/pogo_buddy/internal/handlers"
-  "github.com/chiltom/pogo_buddy/internal/utils"
+	"github.com/chiltom/pogo_buddy/internal/config"
+	"github.com/chiltom/pogo_buddy/internal/db"
+	"github.com/chiltom/pogo_buddy/internal/handlers"
+	"github.com/chiltom/pogo_buddy/internal/utils"
 )
 
 func main() {
   utils.LoadEnv(".env")
 
-  cfg := db.DbConfig{
-    Host:     os.Getenv("DB_HOST"),
-    Port:     os.Getenv("DB_PORT"),
-    User:     os.Getenv("DB_USER"),
-    Password: os.Getenv("DB_PASSWORD"),
-    DBName:   os.Getenv("DB_NAME"),
-    SSLMode: "disable",
-  }
+  cfg := config.LoadDbConfig();
 
   dbConn, err := db.New(cfg)
   if err != nil {
